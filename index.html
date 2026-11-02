@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Révision interactive du cours Docker, de zéro à Docker Compose.">
+  <title>Docker Révision — de zéro à Compose</title>
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#accueil" aria-label="Accueil Docker Révision"><span>◆</span> Docker Révision</a>
+    <nav aria-label="Navigation principale">
+      <a href="#cours">Cours retravaillé</a>
+      <a href="#pdf">Cours original</a>
+      <a href="#revision">Révision</a>
+      <a href="#flashcards">Flashcards</a>
+    </nav>
+    <button id="theme-toggle" class="icon-button" type="button" aria-label="Changer le thème">☾</button>
+  </header>
+  <main>
+    <section id="accueil" class="view active">
+      <div class="hero">
+        <p class="eyebrow">14 heures · 3 parties · pratique</p>
+        <h1>Docker<br><strong>De zéro à Docker Compose</strong></h1>
+        <p class="lead">Comprendre les conteneurs, écrire un Dockerfile propre et orchestrer une stack complète.</p>
+        <div class="hero-actions"><a class="button primary" href="#revision">Commencer une session</a><a class="button ghost" href="#cours">Explorer le cours</a></div>
+      </div>
+      <div class="dashboard-grid">
+        <article class="panel launch-panel">
+          <div class="section-heading"><span class="step">01</span><div><h2>Lancer une révision</h2><p>Les questions sont tirées et mélangées à chaque session.</p></div></div>
+          <label for="part-select">Partie du cours</label>
+          <select id="part-select"><option value="all">Tout le cours</option><option value="fondamentaux">1 · Les fondamentaux</option><option value="dockerfile">2 · Dockerfile</option><option value="compose">3 · Docker Compose</option></select>
+          <label for="type-select">Type d'exercice</label>
+          <select id="type-select"><option value="all">Mélange de tous les types</option><option value="qcm">QCM</option><option value="relier">Questions à relier</option><option value="taper">Réponse à taper</option><option value="vf">Vrai / Faux</option><option value="trou">Texte à trous / code</option></select>
+          <label for="count-range">Nombre de questions <output id="count-output">10</output></label>
+          <input id="count-range" type="range" min="5" max="25" value="10">
+          <label class="check"><input id="timer-toggle" type="checkbox"> Chronomètre</label>
+          <button id="start-button" class="button primary full" type="button">Lancer la session →</button>
+        </article>
+        <aside class="panel stats-panel">
+          <span class="stat-label">Meilleur score</span><strong id="best-score">—</strong><span class="muted">à compléter dans ce navigateur</span>
+          <hr><span class="stat-label">Progression totale</span><strong id="total-answered">0</strong><span class="muted">réponses enregistrées</span>
+          <hr><span class="stat-label">À revoir</span><strong id="missed-count">0</strong><span class="muted">questions ratées</span>
+        </aside>
+      </div>
+    </section>
+
+    <section id="cours" class="view">
+      <div class="page-title"><p class="eyebrow">Synthèse du cours</p><h1>Cours retravaillé</h1><p>Les notions essentielles, reformulées à partir des 54 pages du support.</p></div>
+      <div class="course-layout"><aside class="course-aside"><label for="course-search">Rechercher</label><input id="course-search" type="search" placeholder="ex. volumes, CMD…"><nav id="course-toc" aria-label="Sommaire du cours"></nav></aside><div id="course-content" class="course-content"></div></div>
+    </section>
+
+    <section id="pdf" class="view">
+      <div class="page-title"><p class="eyebrow">Support original</p><h1>Cours original (PDF)</h1><p>Le support complet est affiché ci-dessous. Sur mobile, vous pouvez l'ouvrir dans un nouvel onglet ou aller directement à la fiche simple.</p><div class="hero-actions"><a class="button ghost" href="./assets/cours-original.pdf" target="_blank" rel="noopener">Ouvrir le PDF dans un nouvel onglet ↗</a><a class="button primary" href="#fiche-simple">Voir la fiche simple ↓</a></div></div>
+      <div class="pdf-frame"><iframe src="./assets/cours-original.pdf" title="Cours Docker original"></iframe><div class="pdf-fallback">L'aperçu est indisponible ? <a href="./assets/cours-original.pdf" target="_blank" rel="noopener">Ouvrir / Télécharger le PDF</a></div></div>
+      <article id="fiche-simple" class="easy-sheet">
+        <div class="easy-sheet-header"><span class="easy-icon">🧠</span><div><p class="eyebrow">Fiche express</p><h2>Docker expliqué simplement</h2><p>Une fiche pour retenir les idées importantes, même quand on débute complètement.</p></div></div>
+        <div class="easy-grid">
+          <div class="easy-card"><div class="easy-visual"><span>📦</span><span class="arrow">→</span><span>🚀</span></div><h3>1. Docker, c’est quoi ?</h3><p>Imagine une boîte qui contient une application et tout ce dont elle a besoin. Cette boîte peut fonctionner sur plusieurs ordinateurs de la même façon.</p><div class="easy-note">Image = le modèle 📦<br>Conteneur = la boîte en train de fonctionner 🚀</div></div>
+          <div class="easy-card"><div class="easy-visual"><span>💻</span><span class="arrow">↔</span><span>🔲</span></div><h3>2. Le port, c’est une porte</h3><p>Un conteneur est isolé. Pour ouvrir une porte vers ton navigateur, on publie un port.</p><code>docker run -p 8080:80 httpd</code><p class="easy-caption">La porte <b>8080</b> de ton ordinateur mène à la porte <b>80</b> du conteneur.</p></div>
+          <div class="easy-card"><div class="easy-visual"><span>🗂️</span><span class="arrow">↔</span><span>🐳</span></div><h3>3. Le volume garde les fichiers</h3><p>Sans volume, les fichiers écrits dans le conteneur disparaissent quand il est supprimé. Un volume relie ton dossier au conteneur.</p><code>docker run -v /app:/site httpd</code><p class="easy-caption">À gauche : ton ordinateur. À droite : le conteneur.</p></div>
+          <div class="easy-card"><div class="easy-visual"><span>📄</span><span class="arrow">→</span><span>🏗️</span></div><h3>4. Le Dockerfile est la recette</h3><p>On écrit les étapes dans un fichier. Docker suit la recette pour fabriquer une image.</p><pre><code>FROM nginx:alpine
+COPY index.html /usr/share/nginx/html</code></pre><p class="easy-caption">FROM choisit la base. COPY met un fichier dans l’image.</p></div>
+          <div class="easy-card"><div class="easy-visual"><span>👀</span><span class="arrow">+</span><span>🛠️</span></div><h3>5. Les commandes réflexes</h3><div class="easy-commands"><p><code>docker ps</code><span>voir les conteneurs</span></p><p><code>docker logs web</code><span>lire leurs messages</span></p><p><code>docker exec -it web sh</code><span>entrer dedans</span></p><p><code>docker stop web</code><span>arrêter</span></p></div></div>
+          <div class="easy-card"><div class="easy-visual"><span>🌐</span><span class="arrow">+</span><span>⚙️</span><span class="arrow">+</span><span>🗄️</span></div><h3>6. Compose rassemble la stack</h3><p>Une application complète peut avoir plusieurs conteneurs. Compose les décrit tous dans un seul fichier, comme une fiche qui dit quoi démarrer.</p><div class="stack-visual"><span>🌐 web</span><span>⚙️ api</span><span>🗄️ db</span></div><pre><code>services:
+  web:
+    image: nginx:alpine
+  api:
+    build: ./api
+  db:
+    image: postgres:16-alpine</code></pre><div class="easy-line"><code>docker compose up -d</code><span>« démarre web + api + db »</span></div><p class="easy-caption">services = la liste des conteneurs. <b>image</b> utilise une image existante ; <b>build</b> fabrique l'image depuis un Dockerfile.</p></div>
+        </div>
+        <div class="reflex-commands">
+          <h3>⚡ Commandes réflexes à connaître</h3>
+          <p class="reflex-intro">Lis la colonne de droite pour savoir quand utiliser chaque commande.</p>
+          <div class="reflex-grid">
+            <div class="reflex-group"><strong>🔎 Découvrir</strong><p><code>docker info</code><span>voir l'état de Docker</span></p><p><code>docker images</code><span>voir les images locales</span></p><p><code>docker ps -a</code><span>voir tous les conteneurs</span></p></div>
+            <div class="reflex-group"><strong>▶️ Lancer</strong><p><code>docker pull nginx</code><span>récupérer une image</span></p><p><code>docker run -d -p 8080:80 nginx</code><span>démarrer un serveur</span></p><p><code>docker run -it alpine /bin/sh</code><span>ouvrir un shell</span></p></div>
+            <div class="reflex-group"><strong>👀 Observer</strong><p><code>docker logs -f web</code><span>suivre les messages</span></p><p><code>docker exec -it web sh</code><span>entrer dans un conteneur</span></p><p><code>docker compose ps</code><span>voir l'état de la stack</span></p></div>
+            <div class="reflex-group"><strong>🧹 Arrêter et nettoyer</strong><p><code>docker stop web</code><span>arrêter</span></p><p><code>docker rm web</code><span>supprimer le conteneur</span></p><p><code>docker system prune</code><span>nettoyer les éléments inutilisés</span></p></div>
+            <div class="reflex-group"><strong>🏗️ Construire et publier</strong><p><code>docker build -t mon-api:1.0 .</code><span>fabriquer une image</span></p><p><code>docker login</code><span>se connecter au Hub</span></p><p><code>docker push monlogin/mon-api:1.0</code><span>publier une image</span></p></div>
+            <div class="reflex-group"><strong>🧩 Compose</strong><p><code>docker compose up -d</code><span>démarrer la stack</span></p><p><code>docker compose logs -f api</code><span>suivre les logs de l'API</span></p><p><code>docker compose down</code><span>arrêter la stack</span></p></div>
+          </div>
+          <div class="reflex-warning">⚠️ <b>Attention :</b> <code>docker compose down -v</code> supprime aussi les volumes nommés et leurs données.</div>
+        </div>
+        <div class="easy-memory"><strong>À retenir en 30 secondes</strong><span>📦 Image = modèle</span><span>🚀 Conteneur = application qui tourne</span><span>🚪 -p = ouvrir une porte</span><span>🗂️ -v = garder/partager des fichiers</span><span>📄 Dockerfile = recette</span><span>🧩 Compose = plusieurs conteneurs ensemble</span></div>
+      </article>
+    </section>
+
+    <section id="revision" class="view">
+      <div id="quiz-setup" class="page-title"><p class="eyebrow">Entraînement actif</p><h1>Révision</h1><p>Configurez votre session depuis l'accueil, ou lancez une session par défaut.</p><button id="quick-start" class="button primary" type="button">Démarrer 10 questions</button></div>
+      <div id="quiz-panel" class="quiz-panel hidden"><div class="quiz-top"><div><span id="quiz-label">Question 1 / 10</span><div class="progress"><span id="progress-bar"></span></div></div><div class="live-score"><span id="timer">00:00</span><strong id="live-score">0</strong></div></div><div id="question-card"></div></div>
+    </section>
+
+    <section id="resultats" class="view">
+      <div class="page-title"><p class="eyebrow">Session terminée</p><h1>Résultats</h1></div>
+      <div id="results-card" class="results-card"></div>
+    </section>
+
+    <section id="flashcards" class="view">
+      <div class="page-title"><p class="eyebrow">Bonus mémorisation</p><h1>Flashcards</h1><p>Cliquez sur une carte pour révéler sa réponse.</p></div>
+      <div id="flashcard-list" class="flashcard-grid"></div>
+    </section>
+  </main>
+  <footer><span>Docker Révision · basé uniquement sur le support fourni</span><a href="#pdf">PDF original</a></footer>
+  <script src="./js/cours.js"></script><script src="./js/questions.js"></script><script src="./js/app.js"></script>
+</body>
+</html>
